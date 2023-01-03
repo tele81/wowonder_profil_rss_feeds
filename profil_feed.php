@@ -72,8 +72,9 @@ $enclosure->addAttribute('length', 12345);
   }
 
 
-  // Speicherung der XML-Datei
-   $file = fopen($username . ".xml", "w");
+    // Speicherung der XML-Datei
+  $directory = dirname(__FILE__) . "/xml/";
+  $file = fopen($directory . $username . ".xml", "w");
    fwrite($file, $rssFeed->asXML());
    fclose($file);
    }
@@ -85,7 +86,7 @@ $enclosure->addAttribute('length', 12345);
  }
 }
 // Ausgabe des Links zur XML-Datei
-echo '<a href="' . $username . '.xml">Link zum Feed</a></br>';
+echo '<a href="/xml/' . $username . '.xml">Link zum Feed</a></br>';
 
 if (isset($_GET['user'])) {
   create_xml_for_user($_GET['user']);
