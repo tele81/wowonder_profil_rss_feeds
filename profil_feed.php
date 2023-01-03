@@ -2,6 +2,7 @@
 
 $username = $_GET['user'];
 
+//Funktion für XML Erzeugung via API
 function create_xml_for_user($username) { 
 require 'config.php';
 header('Content-Type: application/rss+xml');
@@ -27,13 +28,13 @@ if ($posts_data['api_status'] == 'success') {
   $channel->addChild('link', $site_url . $username);
   $channel->addChild('description', 'RSS-Feed mit den neuesten Blogposts von ' . $username);
 
-  // Hinzufügen der Blogposts zum RSS-Feed
+// Hinzufügen der Blogposts zum RSS-Feed
   foreach ($posts_data['items'] as $post) {
     $newItem = $channel->addChild('item');
     $guid = $newItem->addChild('guid', $post['publisher_data']['url']);
     $guid->addAttribute('isPermaLink', 'false');
 
-    // Titel des Blogposts
+// Titel des Blogposts
     if (!empty($post['post_data']['post_text'])) {
       $post_title = $post['post_data']['post_text'];
     } else if (!empty($post['post_data']['post_file'])) {
@@ -54,7 +55,7 @@ if ($posts_data['api_status'] == 'success') {
     $newItem->addChild('pubDate', date('D, d M Y H:i:s O', $post['post_data']['post_time']));
 	
 
-    // Falls post_file vorhanden ist, wird diese als Enclosure hinzugefügt
+// Falls post_file vorhanden ist, wird diese als Enclosure hinzugefügt
 	if (!empty($post['post_data']['post_file'])) {
 	  $enclosure = $newItem->addChild('enclosure');
 	  $enclosure->addAttribute('url', $post['post_data']['post_file']);
@@ -62,7 +63,7 @@ if ($posts_data['api_status'] == 'success') {
 	  // Hier könntest du auch "image/png" oder einen anderen Dateityp angeben, je nachdem, welcher Dateityp verwendet wird.
 $enclosure->addAttribute('length', 12345);
     } else {
-      // Falls keine post_file vorhanden ist, wird das profilbild des Publishers als Enclosure hinzugefügt
+// Falls keine post_file vorhanden ist, wird das profilbild des Publishers als Enclosure hinzugefügt
       $enclosure = $newItem->addChild('enclosure');
       $enclosure->addAttribute('url', $post['publisher_data']['profile_picture']);
 	  $enclosure->addAttribute('type', 'image/jpeg,image/png');
@@ -71,20 +72,19 @@ $enclosure->addAttribute('length', 12345);
     
   }
 
-
-    // Speicherung der XML-Datei
+// Speicherung der XML-Datei im Verzeichnis xml
   $directory = dirname(__FILE__) . "/xml/";
   $file = fopen($directory . $username . ".xml", "w");
    fwrite($file, $rssFeed->asXML());
    fclose($file);
    }
 
-   
  } else {
    // Fehlermeldung, falls der Aufruf der API nicht erfolgreich war
    echo 'Beim Aufruf der API ist ein Fehler aufgetreten, dies kann daran liegen das, dass Profil leer ist oder gesperrt.';
  }
 }
+
 // Ausgabe des Links zur XML-Datei
 echo '<a href="/xml/' . $username . '.xml">Link zum Feed</a></br>';
 
