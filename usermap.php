@@ -27,6 +27,7 @@ echo '<div class="container">';
 echo '<h1>Profile als RSS-Feed</h1>';
 echo '<div class="row">';
 
+// Schleife
 foreach ($userArray as $user) {
     // Erstelle Link zur XML-Datei für jeden Benutzer
     $xml_link = 'profil_feed.php?user=' . $user['username'];
