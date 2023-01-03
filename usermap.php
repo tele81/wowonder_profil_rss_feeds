@@ -29,7 +29,7 @@ echo '<div class="row">';
 
 foreach ($userArray as $user) {
     // Erstelle Link zur XML-Datei für jeden Benutzer
-    $xml_link = 'benutzer_feed.php?user=' . $user['username'];
+    $xml_link = 'profil_feed.php?user=' . $user['username'];
     echo '<div class="col-2"><a href="' . $xml_link . '">' . $user['username'] . '</a></div>';
 }
 
